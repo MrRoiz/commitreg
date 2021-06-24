@@ -2,13 +2,19 @@
 	
 	const InitSchema = require('./db/initSchema')
 	const { app, BrowserWindow } = require('electron')
-
-	await (new InitSchema()).migrate()
+	require('./app/Events/GetUserConfig')
+	require('./app/Events/SaveConfig')
 	
+	await (new InitSchema()).migrate()
+
 	function createWindow () {
 		const win = new BrowserWindow({
 			width: 800,
-			height: 600
+			height: 600,
+			webPreferences : {
+				nodeIntegration : true,
+				contextIsolation: false
+			}
 		})
 	
 		win.setMenuBarVisibility(false)

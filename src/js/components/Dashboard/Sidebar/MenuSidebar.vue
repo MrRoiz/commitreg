@@ -13,17 +13,17 @@ export default {
 			{
 				title : 'Home',
 				icon : 'fa fa-lock',
-				route : '/'
+				route : '/dashboard'
 			},
 			{
 				title : 'Settings',
 				icon : 'fa fa-lock',
-				route : '/settings'
+				route : 'settings'
 			},
 			{
 				title : 'About',
 				icon : 'fa fa-lock',
-				route : '/about'
+				route : 'about'
 			}
 		]
 	}),
