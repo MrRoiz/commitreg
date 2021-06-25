@@ -8,7 +8,7 @@
 <script>
 import HeaderSidebar from './HeaderSidebar.vue'
 import MenuSidebar from './MenuSidebar.vue'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
 	components : {
@@ -17,8 +17,19 @@ export default {
 	},
 	computed: {
 		...mapState({
-			showSidebar : (state)=>state.dashboardPage.showSidebar
+			stateSidebar : (state)=>state.dashboardPage.showSidebar
 		}),
+		showSidebar:{
+			get(){
+				return this.stateSidebar
+			},
+			set(show){
+				this.defineShowSidebar(show)
+			}
+		}
+	},
+	methods : {
+		...mapMutations(['defineShowSidebar'])
 	}
 }
 </script>

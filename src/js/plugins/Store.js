@@ -35,6 +35,9 @@ export default new Vuex.Store({
 		},
 		toggleShowSidebar(state){
 			state.dashboardPage.showSidebar = !state.dashboardPage.showSidebar
+		},
+		defineShowSidebar(state,boolean){
+			state.dashboardPage.showSidebar = boolean
 		}
 	},
 	getters : {
