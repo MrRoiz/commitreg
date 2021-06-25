@@ -9,30 +9,38 @@ class InitSchema{
 	}
 
 	async #runMigrations(){
-		const pendingMigrations = await Migration.findAll({
-			where : {
-				executed : 0
+		try{
+			const pendingMigrations = await Migration.findAll({
+				where : {
+					executed : 0
+				}
+			})
+			
+			for(let migration of pendingMigrations){
+				await Sequelize.query(migration.migration)
+				migration.executed = 1
+				await migration.save()
 			}
-		})
 
-		await Promise.all(pendingMigrations.reduce((carry,migration)=>{
-			carry.push(Sequelize.query(migration.migration))
-			migration.executed = 1
-			carry.push(migration.save())
-
-			return carry
-		},[]))
+		}catch(error){
+			console.log(error)
+		}
 	}
 
 	async #updateMigrations(){
-		await Sequelize.query(Schema.migrationsTable)
-		await Promise.all(Schema.migrations.map(migration=>{
-			return Migration.findOrCreate({
-				where: {
-					migration
-				}
-			})
-		}))
+		try{
+			await Sequelize.query(Schema.migrationsTable)
+
+			for(let migration of Schema.migrations){
+				await Migration.findOrCreate({
+					where: {
+						migration
+					}
+				})
+			}
+		}catch(error){
+			console.log(error)
+		}
 	}
 }
 

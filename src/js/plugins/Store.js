@@ -8,25 +8,41 @@ export default new Vuex.Store({
 		welcomePage : {
 			loading : false
 		},
+		dashboardPage : {
+			showSidebar : false
+		},
 		global : {
 			darkTheme : true,
-			username : ''
+			userData : {
+				username : '',
+				id : null
+			}
 		}
 	},
 	mutations : {
-		toggleLoadingWelcomePage(state,showLoading){
+		defineLoadingWelcomePage(state,showLoading){
 			state.welcomePage.loading = showLoading
 		},
 		toggleTheme(state){
 			state.global.darkTheme = !state.global.darkTheme
 		},
-		setUsername(state,username){
-			state.global.username = username
+		setUserData(state,{username,id}){
+			state.global.userData.username = username
+			state.global.userData.id = id
+		},
+		defineDarkTheme(state,boolean){
+			state.global.darkTheme = boolean
+		},
+		toggleShowSidebar(state){
+			state.dashboardPage.showSidebar = !state.dashboardPage.showSidebar
 		}
 	},
 	getters : {
 		themeString(state){
 			return state.global.darkTheme ? 'dark' : 'light'
+		},
+		upperUsername(state){
+			return state.global.userData.username.toUpperCase()
 		}
 	}
 })

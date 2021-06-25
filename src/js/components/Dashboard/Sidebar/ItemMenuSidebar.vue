@@ -1,5 +1,5 @@
 <template>
-	<router-link :to="route">
+	<router-link :to="route" class="text-decoration-none">
   		<v-list-item link>
           	<v-list-item-icon>
             		<v-icon>{{ icon }}</v-icon>

@@ -23,14 +23,15 @@
 							v-model="fullName"
 						/>
 					</v-col>
-					<v-col>
-						<v-switch
-							v-model="darkTheme"
+					<v-col class="d-flex justify-center align-center">
+						<v-btn
+							text
+							@click="toggleTheme"
 							:disabled="loading"
-							inset
-							@change="toggleTheme"
-							:label="darkTheme ? 'Dark Theme' : 'Light Theme'"
-						/>
+						>
+							<v-icon class="mr-3">{{darkTheme ? 'fa fa-moon' : 'fa fa-sun'}}</v-icon>
+							Toggle Theme
+						</v-btn>
 					</v-col>
 				</v-row>
 			</v-card-text>
@@ -56,7 +57,8 @@
 	export default {
 		computed : {
 			...mapState({
-				loading : (state)=>state.welcomePage.loading
+				loading : (state)=>state.welcomePage.loading,
+				darkTheme : (state)=>state.global.darkTheme
 			}),
 			...mapGetters(['themeString'])
 		},
@@ -67,17 +69,17 @@
 			}
 		},
 		data : ()=>({
-			fullName : '',
-			darkTheme : true
+			fullName : ''
 		}),
 		methods : {
 			...mapMutations([
-				'toggleLoadingWelcomePage',
+				'defineLoadingWelcomePage',
 				'toggleTheme',
-				'setUsername'
+				'setUserData',
+				'defineDarkTheme'
 			]),
 			saveConfig(){
-				this.toggleLoadingWelcomePage(true)
+				this.defineLoadingWelcomePage(true)
 
 				ipcRenderer.on('savedConfig',this.savedConfig)
 
@@ -87,9 +89,11 @@
 				})
 			},
 			savedConfig(e,savedConfig){
-				this.toggleLoadingWelcomePage(true)
-				console.log(savedConfig.username,savedConfig.theme)
-				this.setUsername(savedConfig.username)
+				this.defineLoadingWelcomePage(false)
+				this.setUserData({
+					username: savedConfig.Developer.name,
+					id      : savedConfig.id_developer
+				})
 
 				this.$router.push('/dashboard')
 			}

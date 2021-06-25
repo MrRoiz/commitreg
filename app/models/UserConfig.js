@@ -1,15 +1,13 @@
-// import { DataTypes } from 'sequelize'
-// import Sequelize from '../../db/index'
-
 const { DataTypes } = require('sequelize')
 const Sequelize = require('../../db/index')
+const Developer = require('./Developer')
 
 const UserConfig = Sequelize.define('UserConfig',{
-	username : {
-		type : DataTypes.STRING
-	},
 	theme : {
 		type : DataTypes.STRING
+	},
+	id_developer : {
+		type : DataTypes.INTEGER
 	}
 },
 {
@@ -17,5 +15,8 @@ const UserConfig = Sequelize.define('UserConfig',{
 	tableName : 'user_config'
 })
 
+UserConfig.belongsTo(Developer,{
+	foreignKey : 'id_developer'
+})
+
 module.exports = UserConfig
-// export default UserConfig

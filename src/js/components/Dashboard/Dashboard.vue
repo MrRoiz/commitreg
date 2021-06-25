@@ -1,12 +1,12 @@
 <template>
 	<v-container>
-		<sidebar></sidebar>
+		<sidebar/>
 
-		<v-app-bar app> </v-app-bar>
+		<toolbar/>
 
-	<v-main>
+		<v-main>
 			<v-container fluid>
-				<router-view></router-view>
+				<router-view/>
 			</v-container>
 		</v-main>
 
@@ -20,10 +20,12 @@
 
 <script>
 import Sidebar from './Sidebar/Sidebar.vue'
+import Toolbar from './Toolbar/Toolbar.vue'
 
 export default {
 	components : {
-		Sidebar
+		Sidebar,
+		Toolbar
 	}
 };
 </script>

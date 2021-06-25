@@ -1,6 +1,6 @@
 <template>
 	<v-row align="center" justify="center">
-		<v-col lg="8" sm="8">
+		<v-col lg="7" sm="8">
 			<configuration-card :isFirstUse="isFirstUse"/>
 		</v-col>
 	</v-row>
@@ -24,19 +24,32 @@
 			isFirstUse : false
 		}),
 		mounted(){
-			this.toggleLoadingWelcomePage(true)
+			this.defineLoadingWelcomePage(true)
 
 			ipcRenderer.on('gottenUserConfig',this.setUserConfig)
 			ipcRenderer.send('getUserConfig')
 		},
 		methods : {
-			...mapMutations(['toggleLoadingWelcomePage']),
+			...mapMutations([
+				'defineLoadingWelcomePage',
+				'defineDarkTheme',
+				'setUserData'
+			]),
 			setUserConfig(e,userConfig){
+				this.defineLoadingWelcomePage(false)
 				if(!userConfig){
-					this.toggleLoadingWelcomePage(false)
 					this.isFirstUse = true
+				}else{
+					let isDarkTheme = userConfig.theme == 'dark'
+					
+					this.defineDarkTheme(isDarkTheme)
+					this.setUserData({
+						username: userConfig.Developer.name,
+						id      : userConfig.id_developer
+					})
 
-				}else this.$router.push('/dashboard')
+					this.$router.push('/dashboard')
+				}
 			}
 		}
 	}

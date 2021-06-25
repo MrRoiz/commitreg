@@ -11,19 +11,14 @@ export default {
 	data : ()=>({
 		items : [
 			{
-				title : 'Home',
-				icon : 'fa fa-lock',
+				title : 'Dashboard',
+				icon : 'fa fa-tachometer-alt',
 				route : '/dashboard'
 			},
 			{
-				title : 'Settings',
-				icon : 'fa fa-lock',
-				route : 'settings'
-			},
-			{
-				title : 'About',
-				icon : 'fa fa-lock',
-				route : 'about'
+				title : 'Commits',
+				icon : 'fab fa-connectdevelop',
+				route : 'commits'
 			}
 		]
 	}),

@@ -1,14 +1,25 @@
 const { ipcMain } = require('electron')
+const Developer = require('../models/Developer')
 const UserConfig = require('../models/UserConfig')
 
 module.exports = ipcMain.on('saveConfig',async (event,config)=>{
-	let savedConfig = await UserConfig.create({
-		username: config.name,
-		theme   : config.theme
-	})
+	try{
+		let mainUserDeveloper = await Developer.create({
+			name : config.name
+		})
+	
+		await UserConfig.create({
+			theme       : config.theme,
+			id_developer: mainUserDeveloper.id
+		})
 
-	event.reply('savedConfig', {
-		username: savedConfig.username,
-		theme   : savedConfig.theme
-	})
+		let createdUserConfig = await UserConfig.findOne({
+			include : Developer
+		})
+
+		event.reply('savedConfig', createdUserConfig.toJSON())
+	}catch(error){
+		console.log(error)
+	}
+
 })

@@ -4,7 +4,7 @@ import Welcome from '../components/Welcome/Welcome.vue'
 import Dashboard from '../components/Dashboard/Dashboard.vue'
 import DashboardMain from '../components/Dashboard/Views/Main.vue'
 import DashboardAbout from '../components/Dashboard/Views/About.vue'
-import DashboardSettings from '../components/Dashboard/Views/Settings.vue'
+import DashboardCommits from '../components/Dashboard/Views/Commits.vue'
 
 Vue.use(Router)
 
@@ -23,12 +23,8 @@ const routerConfig = new Router({
 					component : DashboardMain
 				},
 				{
-					path : '/settings',
-					component : DashboardSettings
-				},
-				{
-					path : '/about',
-					component : DashboardAbout
+					path : '/commits',
+					component : DashboardCommits
 				}
 			]
 		}

@@ -1,6 +1,3 @@
-// import { DataTypes } from 'sequelize'
-// import Sequelize from '../../db/index'
-
 const { DataTypes } = require('sequelize')
 const Sequelize = require('../../db/index')
 
@@ -14,4 +11,3 @@ const Migration = Sequelize.define('Migration',{
 })
 
 module.exports = Migration
-// export default Migration
