@@ -57,6 +57,9 @@ export default new Vuex.Store({
 		themeString(state){
 			return state.global.darkTheme ? 'dark' : 'light'
 		},
+		oppositeThemeString(state){
+			return state.global.darkTheme ? 'light' : 'dark'
+		},
 		upperUsername(state){
 			return state.global.userData.username.toUpperCase()
 		}

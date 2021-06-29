@@ -32,7 +32,7 @@
 			ThemeIcon
 		},
 		computed : {
-			...mapGetters(['themeString'])
+			...mapGetters(['oppositeThemeString'])
 		},
 		mounted(){
 			ipcRenderer.on('updateUserConfigResponse',this.saveThemeResponse)
@@ -41,11 +41,10 @@
 			...mapMutations(['toggleTheme','showAlert']),
 			toggleThemeMiddleware(){
 				ipcRenderer.send('updateUserConfig',{
-					theme : this.themeString
+					theme : this.oppositeThemeString
 				})
 			},
 			saveThemeResponse(e,response){
-				console.log(response)
 				if(response.bool) this.toggleTheme()
 
 				this.showAlert({
