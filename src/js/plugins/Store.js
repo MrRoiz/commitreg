@@ -6,16 +6,21 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state : {
 		welcomePage : {
-			loading : false
+			loading: false
 		},
 		dashboardPage : {
-			showSidebar : false
+			showSidebar: false
 		},
 		global : {
-			darkTheme : true,
+			darkTheme: true,
 			userData : {
-				username : '',
-				id : null
+				username: '',
+				id      : null
+			},
+			snackbar : {
+				show   : false,
+				message: '',
+				type   : ''
 			}
 		}
 	},
@@ -38,6 +43,14 @@ export default new Vuex.Store({
 		},
 		defineShowSidebar(state,boolean){
 			state.dashboardPage.showSidebar = boolean
+		},
+		showAlert(state,{message,type=''}){
+			state.global.snackbar.show = true
+			state.global.snackbar.message = message
+			state.global.snackbar.type = type
+		},
+		defineShowAlert(state,boolean){
+			state.global.snackbar.show = boolean
 		}
 	},
 	getters : {

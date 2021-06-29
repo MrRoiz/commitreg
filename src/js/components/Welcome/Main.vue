@@ -29,8 +29,7 @@
 							@click="toggleTheme"
 							:disabled="loading"
 						>
-							<v-icon class="mr-3">{{darkTheme ? 'fa fa-moon' : 'fa fa-sun'}}</v-icon>
-							Toggle Theme
+							<theme-icon/>Toggle Theme
 						</v-btn>
 					</v-col>
 				</v-row>
@@ -53,12 +52,15 @@
 <script>
 	import { mapState, mapMutations, mapGetters } from 'vuex'
 	import { ipcRenderer } from 'electron'
+	import ThemeIcon from '../Common/ThemeIcon.vue'
 
 	export default {
+		components : {
+			ThemeIcon
+		},
 		computed : {
 			...mapState({
-				loading : (state)=>state.welcomePage.loading,
-				darkTheme : (state)=>state.global.darkTheme
+				loading : (state)=>state.welcomePage.loading
 			}),
 			...mapGetters(['themeString'])
 		},
@@ -71,31 +73,41 @@
 		data : ()=>({
 			fullName : ''
 		}),
+		mounted(){
+			ipcRenderer.on('storeUserConfigResponse',this.savedConfig)
+		},
 		methods : {
 			...mapMutations([
 				'defineLoadingWelcomePage',
 				'toggleTheme',
 				'setUserData',
-				'defineDarkTheme'
+				'defineDarkTheme',
+				'showAlert'
 			]),
 			saveConfig(){
 				this.defineLoadingWelcomePage(true)
 
-				ipcRenderer.on('savedConfig',this.savedConfig)
-
-				ipcRenderer.send('saveConfig',{
+				ipcRenderer.send('storeUserConfig',{
 					name : this.fullName,
 					theme : this.themeString
 				})
 			},
-			savedConfig(e,savedConfig){
+			savedConfig(e,response){
 				this.defineLoadingWelcomePage(false)
-				this.setUserData({
-					username: savedConfig.Developer.name,
-					id      : savedConfig.id_developer
-				})
 
-				this.$router.push('/dashboard')
+				if(response.bool){
+					this.setUserData({
+						username: response.message.Developer.name,
+						id      : response.message.id_developer
+					})
+	
+					this.$router.push('/dashboard')
+				}else{
+					this.showAlert({
+						message : response.message,
+						type : 'danger'
+					})
+				}
 			}
 		}
 	}

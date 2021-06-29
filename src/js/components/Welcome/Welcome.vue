@@ -26,29 +26,38 @@
 		mounted(){
 			this.defineLoadingWelcomePage(true)
 
-			ipcRenderer.on('gottenUserConfig',this.setUserConfig)
-			ipcRenderer.send('getUserConfig')
+			ipcRenderer.on('showUserConfigResponse',this.setUserConfig)
+			ipcRenderer.send('showUserConfig')
 		},
 		methods : {
 			...mapMutations([
 				'defineLoadingWelcomePage',
 				'defineDarkTheme',
-				'setUserData'
+				'setUserData',
+				'showAlert'
 			]),
-			setUserConfig(e,userConfig){
+			setUserConfig(e,response){
 				this.defineLoadingWelcomePage(false)
-				if(!userConfig){
-					this.isFirstUse = true
+				if(response.bool){
+					if(!response.message){
+						this.isFirstUse = true
+					}else{
+						let isDarkTheme = response.message.theme == 'dark'
+						
+						this.defineDarkTheme(isDarkTheme)
+						this.setUserData({
+							username: response.message.Developer.name,
+							id      : response.message.id_developer
+						})
+	
+						this.$router.push('/dashboard')
+					}
 				}else{
-					let isDarkTheme = userConfig.theme == 'dark'
-					
-					this.defineDarkTheme(isDarkTheme)
-					this.setUserData({
-						username: userConfig.Developer.name,
-						id      : userConfig.id_developer
+					this.isFirstUse = true
+					this.showAlert({
+						message : response.message,
+						type : 'danger'
 					})
-
-					this.$router.push('/dashboard')
 				}
 			}
 		}

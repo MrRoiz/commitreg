@@ -19,6 +19,26 @@ export default {
 				title : 'Commits',
 				icon : 'fab fa-connectdevelop',
 				route : 'commits'
+			},
+			{
+				title : 'Repositories',
+				icon : 'fa fa-folder',
+				route : 'repositories'
+			},
+			{
+				title : 'Branches',
+				icon : 'fa fa-code-branch',
+				route : ''
+			},
+			{
+				title : 'Modules',
+				icon : 'fa fa-sitemap',
+				route : ''
+			},
+			{
+				title : 'Developers',
+				icon : 'fa fa-users',
+				route : ''
 			}
 		]
 	}),

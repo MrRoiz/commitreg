@@ -2,8 +2,7 @@
 	
 	const InitSchema = require('./db/initSchema')
 	const { app, BrowserWindow } = require('electron')
-	require('./app/Events/GetUserConfig')
-	require('./app/Events/SaveConfig')
+	require('./app/Events/index')
 	
 	await (new InitSchema()).migrate()
 

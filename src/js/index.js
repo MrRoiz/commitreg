@@ -4,6 +4,7 @@ import vuetify from './plugins/Vuetify'
 import store from './plugins/Store'
 import App from './components/App.vue'
 import { mapState } from 'vuex'
+
 new Vue({
 	render : render=>render('App'),
 	router,
