@@ -17,23 +17,7 @@
 				<template v-if="repositories.length > 0">
 					<repository v-for="repository of repositories" :key="repository.id" :repository="repository"/>
 				</template>
-				<template v-else>
-					<v-row justify='center'>
-						<v-alert
-							class='mt-10'
-							prominent
-							type='info'
-						>
-							There's no repositories to show
-
-							<v-btn class='ml-8' @click="defineShowModalCreationRepository(true)">
-								Create Repository
-							</v-btn>
-
-						</v-alert>
-					</v-row>
-
-				</template>
+				<no-repositories-message v-else/>
 
 			</template>
 			<skeleton-loader v-else v-for='index in 8' :key='index'/>
@@ -47,6 +31,7 @@
 	import SkeletonLoader from './SkeletonLoader.vue'
 	import ModalCreateRepository from './ModalCreateRepository.vue'
 	import Repository from './Repository.vue'
+	import NoRepositoriesMessage from './NoRepositoriesMessage.vue'
 	import { mapState, mapActions, mapMutations } from 'vuex'
 
 	export default {
@@ -54,7 +39,8 @@
 			TitleHeader,
 			SkeletonLoader,
 			ModalCreateRepository,
-			Repository
+			Repository,
+			NoRepositoriesMessage
 		},
 		computed : {
 			...mapState({
