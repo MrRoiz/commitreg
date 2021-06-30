@@ -1,6 +1,8 @@
 <template>
 	<v-list dense nav>
-		<item-menu-sidebar v-for="item in items" :key="item.title" :title="item.title" :icon="item.icon" :route="item.route"></item-menu-sidebar>
+		<v-list-item-group v-model="selected">
+			<item-menu-sidebar v-for="item in items" :key="item.title" :title="item.title" :icon="item.icon" :route="item.route"></item-menu-sidebar>
+		</v-list-item-group>
      </v-list>
 </template>
 
@@ -40,7 +42,8 @@ export default {
 				icon : 'fa fa-users',
 				route : ''
 			}
-		]
+		],
+		selected : 0
 	}),
 	components : {
 		ItemMenuSidebar

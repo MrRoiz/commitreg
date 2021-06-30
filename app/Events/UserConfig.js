@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
-const Developer = require('../models/Developer')
-const UserConfig = require('../models/UserConfig')
+const Developer = require('../Models/Developer')
+const UserConfig = require('../Models/UserConfig')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
 
@@ -49,7 +49,7 @@ const events = {
 		})
 	},
 	
-	updateTheme(){
+	update(){
 		ipcMain.on('updateUserConfig',async (event,themeConfig)=>{
 			try{
 				Validate(themeConfig,{

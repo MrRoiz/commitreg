@@ -34,12 +34,11 @@
 		computed : {
 			...mapGetters(['oppositeThemeString'])
 		},
-		mounted(){
-			ipcRenderer.on('updateUserConfigResponse',this.saveThemeResponse)
-		},
 		methods : {
 			...mapMutations(['toggleTheme','showAlert']),
 			toggleThemeMiddleware(){
+				ipcRenderer.once('updateUserConfigResponse',this.saveThemeResponse)
+
 				ipcRenderer.send('updateUserConfig',{
 					theme : this.oppositeThemeString
 				})

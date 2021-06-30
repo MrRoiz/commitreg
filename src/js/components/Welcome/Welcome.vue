@@ -26,7 +26,7 @@
 		mounted(){
 			this.defineLoadingWelcomePage(true)
 
-			ipcRenderer.on('showUserConfigResponse',this.setUserConfig)
+			ipcRenderer.once('showUserConfigResponse',this.setUserConfig)
 			ipcRenderer.send('showUserConfig')
 		},
 		methods : {

@@ -4,7 +4,7 @@ import Welcome from '../components/Welcome/Welcome.vue'
 import Dashboard from '../components/Dashboard/Dashboard.vue'
 import DashboardMain from '../components/Dashboard/Views/Main.vue'
 import DashboardCommits from '../components/Dashboard/Views/Commits.vue'
-import DashboardRepositories from '../components/Dashboard/Views/Repositories.vue'
+import DashboardRepositories from '../components/Dashboard/Views/Repositories/Repositories.vue'
 
 Vue.use(Router)
 

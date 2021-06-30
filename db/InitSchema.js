@@ -1,4 +1,4 @@
-const Migration = require('../app/models/Migration')
+const Migration = require('../app/Models/Migration')
 const Sequelize = require('./index')
 const Schema = require('./Schema.sql.json')
 

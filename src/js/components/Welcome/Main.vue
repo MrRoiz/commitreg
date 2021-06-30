@@ -73,9 +73,6 @@
 		data : ()=>({
 			fullName : ''
 		}),
-		mounted(){
-			ipcRenderer.on('storeUserConfigResponse',this.savedConfig)
-		},
 		methods : {
 			...mapMutations([
 				'defineLoadingWelcomePage',
@@ -86,6 +83,8 @@
 			]),
 			saveConfig(){
 				this.defineLoadingWelcomePage(true)
+
+				ipcRenderer.once('storeUserConfigResponse',this.savedConfig)
 
 				ipcRenderer.send('storeUserConfig',{
 					name : this.fullName,
