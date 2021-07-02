@@ -47,7 +47,7 @@
 				success : 'success',
 				warning : 'warning',
 				info	   : 'info',
-				danger  : '#F44336',
+				danger  : 'error',
 				default : 'default'
 			}
 		}),

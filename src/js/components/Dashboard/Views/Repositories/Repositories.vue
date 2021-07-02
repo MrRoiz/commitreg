@@ -5,7 +5,7 @@
 				text
 				color='success'
 				small
-				@click="defineShowModalCreationRepository(true)"
+				@click="defineShowModalUpdateCreationRepository({show:true})"
 			>
 				<v-icon>fa fa-plus</v-icon>
 			</v-btn>
@@ -22,14 +22,14 @@
 			</template>
 			<skeleton-loader v-else v-for='index in 8' :key='index'/>
 		</v-row>
-		<modal-create-repository/>
+		<modal-create-update-repository/>
 	</div>
 </template>
 
 <script>
 	import TitleHeader from '../../../Common/TitleHeader.vue'
 	import SkeletonLoader from './SkeletonLoader.vue'
-	import ModalCreateRepository from './ModalCreateRepository.vue'
+	import ModalCreateUpdateRepository from './ModalCreateUpdateRepository.vue'
 	import Repository from './Repository.vue'
 	import NoRepositoriesMessage from './NoRepositoriesMessage.vue'
 	import { mapState, mapActions, mapMutations } from 'vuex'
@@ -38,25 +38,28 @@
 		components : {
 			TitleHeader,
 			SkeletonLoader,
-			ModalCreateRepository,
+			ModalCreateUpdateRepository,
 			Repository,
 			NoRepositoriesMessage
 		},
 		computed : {
 			...mapState({
-				repositories : (state)=>state.repositoriesPage.repositories,
-				loading : (state)=>state.repositoriesPage.loading
+				repositories : (state)=>state.repository.repositories
 			})
 		},
-		mounted(){
+		data : ()=>({
+			loading : false
+		}),
+		async mounted(){
 			if(this.repositories.length <= 0){
-				this.defineLoadingRepositoriesPage(true)
-				this.getRepositories()
+				this.loading = true
+				await this.getRepositories()
+				this.loading = false
 			}
 		},
 		methods : {
 			...mapActions(['getRepositories']),
-			...mapMutations(['defineLoadingRepositoriesPage','defineShowModalCreationRepository'])
+			...mapMutations(['defineShowModalUpdateCreationRepository'])
 		}
 	}
 </script>

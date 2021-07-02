@@ -5,9 +5,9 @@
 			prominent
 			type='info'
 		>
-			There's no repositories to show
+			No repositories to show
 
-			<v-btn class='ml-8' @click="defineShowModalCreationRepository(true)">
+			<v-btn class='ml-8' @click="defineShowModalUpdateCreationRepository({show:true})">
 				Create Repository
 			</v-btn>
 
@@ -20,7 +20,7 @@
 	
 	export default {
 		methods : {
-			...mapMutations(['defineShowModalCreationRepository'])
+			...mapMutations(['defineShowModalUpdateCreationRepository'])
 		}
 	}
 </script>

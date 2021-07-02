@@ -32,6 +32,25 @@ const events = {
 			}
 		})
 	},
+	destroy(){
+		ipcMain.on('destroyRepository',async (event,repository)=>{
+			try{
+				Validate(repository,{
+					id : 'required'
+				})
+
+				await Repository.destroy({
+					where : {
+						id : repository.id
+					}
+				})
+
+				event.reply('destroyRepositoryResponse',Response(true,'Repository Deleted'))
+			}catch(error){
+				event.reply('destroyRepositoryResponse',Response(false,error.message))
+			}
+		})
+	}
 }
 
 Object.values(events).forEach(event=>event())

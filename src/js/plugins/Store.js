@@ -12,11 +12,20 @@ export default new Vuex.Store({
 		dashboardPage : {
 			showSidebar: false
 		},
-		repositoriesPage : {
-			loading : false,
-			repositories : [],
+		repository : {
+			create : {
+				showModal : false
+			},
+			update : {
+				showModal : false,
+				data : {
+					id         : '',
+					name       : '',
+					description: '',
+				}
+			},
 			showModalCreation : false,
-			savingRepository : false
+			repositories : []
 		},
 		global : {
 			darkTheme: true,
@@ -59,20 +68,39 @@ export default new Vuex.Store({
 		defineShowAlert(state,boolean){
 			state.global.snackbar.show = boolean
 		},
-		defineLoadingRepositoriesPage(state,boolean){
-			state.repositoriesPage.loading = boolean
-		},
 		associateRepositories(state,repositories){
-			state.repositoriesPage.repositories = [
-				...state.repositoriesPage.repositories,
+			state.repository.repositories = [
+				...state.repository.repositories,
 				...repositories
 			]
 		},
-		defineShowModalCreationRepository(state,boolean){
-			state.repositoriesPage.showModalCreation = boolean
+		defineShowModalUpdateCreationRepository(state,{show,data = null}){
+			if(data){
+				state.repository.updateCreate.data.id = data.id
+				state.repository.updateCreate.data.name = data.name
+				state.repository.updateCreate.data.description = data.description
+			}else{
+				Object.keys(state.repository.updateCreate.data).forEach(key=>{
+					if(key == 'id'){
+						state.repository.updateCreate.data[key] = null
+					}else{
+						state.repository.updateCreate.data[key] = ''	
+					}
+				})
+			}
+
+			state.repository.updateCreate.showModal = show
 		},
-		defineSavingRepository(state,boolean){
-			state.repositoriesPage.saveRepository = boolean
+		removeRepository(state,idRepository){
+			state.repository.repositories = state.repository.repositories.filter(repository=>{
+				return repository.id != idRepository
+			})
+		},
+		defineNameRepositoryUpdateCreate(state,name){
+			state.repository.updateCreate.data.name = name
+		},
+		defineDecriptionRepositoryUpdateCreate(state,decription){
+			state.repository.updateCreate.data.decription = decription
 		}
 	},
 	getters : {
@@ -88,40 +116,72 @@ export default new Vuex.Store({
 	},
 	actions : {
 		getRepositories({commit}){
-			ipcRenderer.once('indexRepositoryResponse',(e,response)=>{
-				commit('defineLoadingRepositoriesPage',false)
-
-				if(response.bool){
-					console.log(response.message)
-					commit('associateRepositories',response.message)
-				}else{
-					commit('showAlert',{
-						message : response.message,
-						type : 'danger'
-					})
-				}
+			return new Promise((resolve)=>{
+				ipcRenderer.once('indexRepositoryResponse',(e,response)=>{
+					if(response.bool){
+						commit('associateRepositories',response.message)
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('indexRepository')
 			})
-
-			ipcRenderer.send('indexRepository')
 		},
 		saveRepository({commit},repository){
-			ipcRenderer.once('storeRepositoryResponse',(e,response)=>{
-				commit('defineSavingRepository',false)
+			return new Promise((resolve)=>{
+				ipcRenderer.once('storeRepositoryResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreationRepository',{
+							show : false
+						})
 
-				if(response.bool){
-					commit('associateRepositories',[response.message])
-					commit('defineShowModalCreationRepository',false)
-				}else{
-					commit('showAlert',{
-						message : response.message,
-						type : 'danger'
-					})
-				}
+						commit('associateRepositories',[response.message])
+	
+						commit('showAlert',{
+							message: 'Repository Saved',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('storeRepository',repository)
 			})
-
-			commit('defineSavingRepository',true)
-
-			ipcRenderer.send('storeRepository',repository)
+		},
+		deleteRepository({commit},idRepository){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('destroyRepositoryResponse',(event,response)=>{
+	
+					if(response.bool){
+						commit('removeRepository',idRepository)
+	
+						commit('showAlert',{
+							message : response.message,
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('destroyRepository',{
+					id : idRepository
+				})
+			})
 		}
 	}
 })
