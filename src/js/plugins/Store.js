@@ -13,13 +13,10 @@ export default new Vuex.Store({
 			showSidebar: false
 		},
 		repository : {
-			create : {
-				showModal : false
-			},
-			update : {
+			updateCreate : {
 				showModal : false,
 				data : {
-					id         : '',
+					id         : null,
 					name       : '',
 					description: '',
 				}
@@ -74,7 +71,7 @@ export default new Vuex.Store({
 				...repositories
 			]
 		},
-		defineShowModalUpdateCreationRepository(state,{show,data = null}){
+		defineShowModalUpdateCreateRepository(state,{show,data = null}){
 			if(data){
 				state.repository.updateCreate.data.id = data.id
 				state.repository.updateCreate.data.name = data.name
@@ -99,8 +96,16 @@ export default new Vuex.Store({
 		defineNameRepositoryUpdateCreate(state,name){
 			state.repository.updateCreate.data.name = name
 		},
-		defineDecriptionRepositoryUpdateCreate(state,decription){
-			state.repository.updateCreate.data.decription = decription
+		defineDescriptionRepositoryUpdateCreate(state,description){
+			state.repository.updateCreate.data.description = description
+		},
+		updateRepository(state,updatedRepository){
+			let repository = state.repository.repositories.find(repo=>repo.id == updatedRepository.id)
+			
+			Object.entries(updatedRepository).forEach(([attribute,value])=>{
+				if(attribute == 'id') return
+				repository[attribute] = value
+			})
 		}
 	},
 	getters : {
@@ -136,7 +141,7 @@ export default new Vuex.Store({
 			return new Promise((resolve)=>{
 				ipcRenderer.once('storeRepositoryResponse',(e,response)=>{
 					if(response.bool){
-						commit('defineShowModalUpdateCreationRepository',{
+						commit('defineShowModalUpdateCreateRepository',{
 							show : false
 						})
 
@@ -156,6 +161,32 @@ export default new Vuex.Store({
 				})
 	
 				ipcRenderer.send('storeRepository',repository)
+			})
+		},
+		updateRepository({commit},repository){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('updateRepositoryResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreateRepository',{
+							show : false
+						})
+
+						commit('updateRepository',response.message)
+	
+						commit('showAlert',{
+							message: 'Repository Updated',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('updateRepository',repository)
 			})
 		},
 		deleteRepository({commit},idRepository){

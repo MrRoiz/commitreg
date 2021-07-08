@@ -32,6 +32,31 @@ const events = {
 			}
 		})
 	},
+	update(){
+		ipcMain.on('updateRepository',async (event,repository)=>{
+			try{
+				Validate(repository,{
+					id   : 'required',
+					name : 'required'
+				})
+				
+				let responseUpdate = await Repository.update({
+					name : repository.name,
+					description : repository.description
+				},{
+					where : {
+						id : repository.id
+					}
+				})
+
+				if(responseUpdate[0] != 1) throw new Error('It was not possible to update the repository')
+
+				event.reply('updateRepositoryResponse',Response(true,repository))
+			}catch(error){
+				event.reply('updateRepositoryResponse',Response(false,error.message))
+			}
+		})
+	},
 	destroy(){
 		ipcMain.on('destroyRepository',async (event,repository)=>{
 			try{

@@ -5,12 +5,12 @@
 		max-width='700'
 	>
 		<v-card :loading="saving">
-			<v-card-title>Create Repository</v-card-title>
+			<v-card-title>{{ !id ? 'Create Repository' : 'Update Repository'}}</v-card-title>
 			<v-card-text>
 				<v-container>
 					<v-form ref="createRepositoryForm">
-						<v-text-field v-model='data.name' label='Name' :rules='rules.name'/>
-						<v-textarea v-model='data.description' label='Description'/>
+						<v-text-field v-model='name' label='Name' :rules='rules.name'/>
+						<v-textarea v-model='description' label='Description'/>
 					</v-form>
 				</v-container>
 			</v-card-text>
@@ -18,7 +18,7 @@
 			<v-card-actions class='d-flex justify-end'>
 				<v-btn
 					text
-					@click="defineShowModalCreateRepository(false)"
+					@click="defineShowModalUpdateCreateRepository({show:false})"
 				>
 					cancel
 				</v-btn>
@@ -27,7 +27,7 @@
 					color='success'
 					@click="save"
 				>
-					save
+					{{ !id ? 'save' : 'update'}}
 				</v-btn>
 			</v-card-actions>
 		</v-card>
@@ -49,24 +49,31 @@
 					return this.showState
 				},
 				set(show){
-					this.defineShowModalUpdateCreationRepository({show})
+					this.defineShowModalUpdateCreateRepository({show})
 				}
+			},
+			id(){
+				return this.dataState.id
 			},
 			name : {
 				get(){
 					return this.dataState.name
 				},
 				set(name){
-
+					this.defineNameRepositoryUpdateCreate(name)
+				}
+			},
+			description : {
+				get(){
+					return this.dataState.description
+				},
+				set(description){
+					this.defineDescriptionRepositoryUpdateCreate(description)
 				}
 			}
 		},
 		data : ()=>({
 			saving : false,
-			data : {
-				name       : '',
-				description: '',
-			},
 			rules : {
 				name : [
 					value => !!value || 'Required Field'
@@ -75,19 +82,29 @@
 		}),
 		methods : {
 			...mapMutations([
-				'defineShowModalUpdateCreationRepository',
+				'defineShowModalUpdateCreateRepository',
 				'defineNameRepositoryUpdateCreate',
-				'defineDecriptionRepositoryUpdateCreate'
+				'defineDescriptionRepositoryUpdateCreate'
 			]),
-			...mapActions(['saveRepository']),
+			...mapActions(['saveRepository','updateRepository']),
 			async save(){
 				if(this.$refs.createRepositoryForm.validate()){
 					this.saving = true
-
-					await this.saveRepository({
-						name : this.data.name,
-						description : this.data.description != '' ? this.description : null
-					})
+					
+					// Save
+					if(!this.id){
+						await this.saveRepository({
+							name : this.name,
+							description : this.description != '' ? this.description : null
+						})
+					}else{
+						// Update
+						await this.updateRepository({
+							id : this.id,
+							name : this.name,
+							description : this.description != '' ? this.description : null
+						})
+					}
 					
 					this.saving = false
 				}

@@ -44,7 +44,7 @@
 		}),
 		methods : {
 			...mapActions(['deleteRepository']),
-			...mapMutations(['defineShowModalUpdateCreationRepository']),
+			...mapMutations(['defineShowModalUpdateCreateRepository']),
 			async deleteRepositoryMiddleware(){
 				this.deleting = true
 				this.deleteConfirmation = false
@@ -54,7 +54,7 @@
 				this.deleting = false
 			},
 			editRepository(){
-				this.defineShowModalUpdateCreationRepository({
+				this.defineShowModalUpdateCreateRepository({
 					show : true,
 					data : this.repository
 				})

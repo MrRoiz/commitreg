@@ -5,7 +5,7 @@
 				text
 				color='success'
 				small
-				@click="defineShowModalUpdateCreationRepository({show:true})"
+				@click="defineShowModalUpdateCreateRepository({show:true})"
 			>
 				<v-icon>fa fa-plus</v-icon>
 			</v-btn>
@@ -59,7 +59,7 @@
 		},
 		methods : {
 			...mapActions(['getRepositories']),
-			...mapMutations(['defineShowModalUpdateCreationRepository'])
+			...mapMutations(['defineShowModalUpdateCreateRepository'])
 		}
 	}
 </script>
