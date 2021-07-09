@@ -1,7 +1,7 @@
 {
-  "name": "testjs",
+  "name": "commitreg",
   "version": "1.0.0",
-  "description": "",
+  "description": "CommitReg is a opensource application (fully offline) to have an easy way to track commits and its SQL scripts (if needed) on projects, made on [Electron](https://github.com/electron/electron) and [Vuejs](https://github.com/vuejs/vue).",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,8 +10,8 @@
     "prod": "webpack --mode production",
     "start": "electron ."
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Oscar Ruiz",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.13.13",
     "babel-loader": "^8.2.2",
@@ -38,5 +38,18 @@
     "vue-router": "^3.5.1",
     "vuetify": "^2.5.4",
     "vuex": "^3.6.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrRoiz/commitreg.git"
+  },
+  "keywords": [
+    "commit",
+    "tracking",
+    "tool"
+  ],
+  "bugs": {
+    "url": "https://github.com/MrRoiz/commitreg/issues"
+  },
+  "homepage": "https://github.com/MrRoiz/commitreg#readme"
 }
