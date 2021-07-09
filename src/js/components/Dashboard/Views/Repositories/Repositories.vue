@@ -28,8 +28,8 @@
 
 <script>
 	import TitleHeader from '../../../Common/TitleHeader.vue'
-	import SkeletonLoader from './SkeletonLoader.vue'
-	import ModalCreateUpdateRepository from './ModalCreateUpdateRepository.vue'
+	import SkeletonLoader from '../../../Common/SkeletonLoaders/LoaderCardActions.vue'
+	import ModalCreateUpdateRepository from '../../../Common/Modals/CreateUpdateRepository.vue'
 	import Repository from './Repository.vue'
 	import NoRepositoriesMessage from './NoRepositoriesMessage.vue'
 	import { mapState, mapActions, mapMutations } from 'vuex'

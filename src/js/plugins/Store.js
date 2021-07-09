@@ -24,6 +24,18 @@ export default new Vuex.Store({
 			showModalCreation : false,
 			repositories : []
 		},
+		branch : {
+			updateCreate : {
+				showModal : false,
+				data : {
+					id         : null,
+					name       : '',
+					description: '',
+				}
+			},
+			showModalCreation : false,
+			branches : []
+		},
 		global : {
 			darkTheme: true,
 			userData : {
@@ -106,7 +118,49 @@ export default new Vuex.Store({
 				if(attribute == 'id') return
 				repository[attribute] = value
 			})
-		}
+		},
+		associateBranches(state,branches){
+			state.branch.branches = [
+				...state.branch.branches,
+				...branches
+			]
+		},
+		defineShowModalUpdateCreateBranch(state,{show,data = null}){
+			if(data){
+				state.branch.updateCreate.data.id = data.id
+				state.branch.updateCreate.data.name = data.name
+				state.branch.updateCreate.data.description = data.description
+			}else{
+				Object.keys(state.branch.updateCreate.data).forEach(key=>{
+					if(key == 'id'){
+						state.branch.updateCreate.data[key] = null
+					}else{
+						state.branch.updateCreate.data[key] = ''	
+					}
+				})
+			}
+
+			state.branch.updateCreate.showModal = show
+		},
+		defineNameBranchUpdateCreate(state,name){
+			state.branch.updateCreate.data.name = name
+		},
+		defineDescriptionBranchUpdateCreate(state,description){
+			state.branch.updateCreate.data.description = description
+		},
+		updateBranch(state,updatedBranch){
+			let branch = state.branch.branches.find(branch=>branch.id == updatedBranch.id)
+			
+			Object.entries(updatedBranch).forEach(([attribute,value])=>{
+				if(attribute == 'id') return
+				branch[attribute] = value
+			})
+		},
+		removeBranch(state,idBranch){
+			state.branch.branches = state.branch.branches.filter(branch=>{
+				return branch.id != idBranch
+			})
+		},
 	},
 	getters : {
 		themeString(state){
@@ -213,6 +267,100 @@ export default new Vuex.Store({
 					id : idRepository
 				})
 			})
-		}
+		},
+		getBranches({commit}){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('indexBranchResponse',(e,response)=>{
+					if(response.bool){
+						commit('associateBranches',response.message)
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('indexBranch')
+			})
+		},
+		saveBranch({commit},branch){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('storeBranchResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreateBranch',{
+							show : false
+						})
+
+						commit('associateBranches',[response.message])
+	
+						commit('showAlert',{
+							message: 'Branch Saved',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('storeBranch',branch)
+			})
+		},
+		updateBranch({commit},branch){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('updateBranchResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreateBranch',{
+							show : false
+						})
+
+						commit('updateBranch',response.message)
+	
+						commit('showAlert',{
+							message: 'Branch Updated',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('updateBranch',branch)
+			})
+		},
+		deleteBranch({commit},idBranch){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('destroyBranchResponse',(event,response)=>{
+	
+					if(response.bool){
+						commit('removeBranch',idBranch)
+	
+						commit('showAlert',{
+							message : response.message,
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('destroyBranch',{
+					id : idBranch
+				})
+			})
+		},
 	}
 })

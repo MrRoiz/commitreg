@@ -40,7 +40,7 @@ const events = {
 					name : 'required'
 				})
 				
-				let responseUpdate = await Repository.update({
+				let [responseUpdate] = await Repository.update({
 					name : repository.name,
 					description : repository.description
 				},{
@@ -49,7 +49,7 @@ const events = {
 					}
 				})
 
-				if(responseUpdate[0] != 1) throw new Error('It was not possible to update the repository')
+				if(responseUpdate != 1) throw new Error('It was not possible to update the repository')
 
 				event.reply('updateRepositoryResponse',Response(true,repository))
 			}catch(error){

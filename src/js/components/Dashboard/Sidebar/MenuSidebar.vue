@@ -30,7 +30,7 @@ export default {
 			{
 				title : 'Branches',
 				icon : 'fa fa-code-branch',
-				route : ''
+				route : 'branches'
 			},
 			{
 				title : 'Modules',
