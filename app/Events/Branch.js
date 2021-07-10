@@ -18,12 +18,14 @@ const events = {
 		ipcMain.on('storeBranch',async (event,branch)=>{
 			try{
 				Validate(branch,{
-					name : 'required'
+					name : 'required',
+					idRepository : 'required'
 				})
 
 				let newBranch = await Branch.create({
 					name       : branch.name,
-					description: branch.description
+					description: branch.description,
+					id_repository : branch.idRepository
 				})
 
 				event.reply('storeBranchResponse',Response(true,newBranch.toJSON()))

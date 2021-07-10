@@ -17,30 +17,39 @@
 				<template v-if="repositories.length > 0">
 					<repository v-for="repository of repositories" :key="repository.id" :repository="repository"/>
 				</template>
-				<no-repositories-message v-else/>
+				
+				<no-content-message v-else>
+
+					<template v-slot:message>
+						No repositories to show
+					</template>
+					<template v-slot:action>
+						<v-btn @click="defineShowModalUpdateCreateRepository({show:true})">
+							Create Repository
+						</v-btn>
+					</template>
+
+				</no-content-message>
 
 			</template>
 			<skeleton-loader v-else v-for='index in 8' :key='index'/>
 		</v-row>
-		<modal-create-update-repository/>
 	</div>
 </template>
 
 <script>
 	import TitleHeader from '../../../Common/TitleHeader.vue'
 	import SkeletonLoader from '../../../Common/SkeletonLoaders/LoaderCardActions.vue'
-	import ModalCreateUpdateRepository from '../../../Common/Modals/CreateUpdateRepository.vue'
 	import Repository from './Repository.vue'
-	import NoRepositoriesMessage from './NoRepositoriesMessage.vue'
+	import NoContentMessage from '../../../Common/Messages/NoContentMessage.vue'
 	import { mapState, mapActions, mapMutations } from 'vuex'
 
 	export default {
 		components : {
 			TitleHeader,
 			SkeletonLoader,
-			ModalCreateUpdateRepository,
 			Repository,
-			NoRepositoriesMessage
+			NoContentMessage
 		},
 		computed : {
 			...mapState({

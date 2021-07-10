@@ -1,65 +1,58 @@
 <template>
 	<div>
-		<title-header title="Branches">
-			<v-btn
-				text
-				color='success'
-				small
-				@click="defineShowModalUpdateCreateBranch({show:true})"
-			>
-				<v-icon>fa fa-plus</v-icon>
-			</v-btn>
-		</title-header>
+		<title-header title="Branches"/>
 
-		<v-row>
-			<template v-if="!loading">
-
-				<template v-if="branches.length > 0">
-					<branch v-for="branch of branches" :key="branch.id" :branch="branch"/>
-				</template>
-				<no-branches-message v-else/>
-
+		<div v-if="!loading">
+			<template v-if='repositories.length > 0'>
+				<repository-container v-for='repository of repositories' :key='repository.id' :repository='repository'/>
 			</template>
-			<skeleton-loader v-else v-for='index in 8' :key='index'/>
-		</v-row>
-		<modal-create-update-branch/>
+			<no-content-message v-else>
+				<template v-slot:message>
+					No repositories to associate branches
+				</template>
+				<template v-slot:action>
+					<v-btn @click='defineShowModalUpdateCreateRepository({show:true})'>
+						create repository
+					</v-btn>
+				</template>
+			</no-content-message>
+		</div>
+		<skeleton-loader v-else v-for='index in 2' :key='index'/>
 	</div>
 </template>
 
 <script>
-	import Branch from './Branch.vue'
-	import NoBranchesMessage from './NoBranchesMessage.vue'
 	import TitleHeader from '../../../Common/TitleHeader.vue'
 	import { mapState, mapActions, mapMutations } from 'vuex'
-	import ModalCreateUpdateBranch from '../../../Common/Modals/CreateUpdateBranch.vue'
-	import SkeletonLoader from '../../../Common/SkeletonLoaders/LoaderCardActions.vue'
+	import RepositoryContainer from './RepositoryContainer.vue'
+	import NoContentMessage from '../../../Common/Messages/NoContentMessage.vue'
+	import SkeletonLoader from '../../../Common/SkeletonLoaders/LoaderRowHeaderImage.vue'
 
 	export default {
 		components : {
 			TitleHeader,
 			SkeletonLoader,
-			NoBranchesMessage,
-			ModalCreateUpdateBranch,
-			Branch
+			NoContentMessage,
+			RepositoryContainer,
 		},
 		computed : {
 			...mapState({
-				branches : (state)=>state.branch.branches
+				repositories : state=>state.repository.repositories
 			})
 		},
 		data : ()=>({
 			loading : false
 		}),
 		async mounted(){
-			if(this.branches.length <= 0){
+			if(this.repositories.length <= 0){
 				this.loading = true
-				await this.getBranches()
+				if(this.repositories.length <= 0) await this.getRepositories()
 				this.loading = false
 			}
 		},
 		methods : {
-			...mapActions(['getBranches']),
-			...mapMutations(['defineShowModalUpdateCreateBranch'])
+			...mapActions(['getRepositories']),
+			...mapMutations(['defineShowModalUpdateCreateRepository'])
 		}
 	}
 </script>

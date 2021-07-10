@@ -8,7 +8,7 @@
 			<v-card-title>{{ !id ? 'Create Branch' : 'Update Branch'}}</v-card-title>
 			<v-card-text>
 				<v-container>
-					<v-form ref="createBranchForm">
+					<v-form ref="createBranchForm" @submit.prevent='save'>
 						<v-text-field v-model='name' label='Name' :rules='rules.name'/>
 						<v-textarea v-model='description' label='Description'/>
 					</v-form>
@@ -55,6 +55,9 @@
 			id(){
 				return this.dataState.id
 			},
+			idRepository(){
+				return this.dataState.idRepository
+			},
 			name : {
 				get(){
 					return this.dataState.name
@@ -95,7 +98,8 @@
 					if(!this.id){
 						await this.saveBranch({
 							name : this.name,
-							description : this.description != '' ? this.description : null
+							description : this.description != '' ? this.description : null,
+							idRepository : this.idRepository
 						})
 					}else{
 						// Update

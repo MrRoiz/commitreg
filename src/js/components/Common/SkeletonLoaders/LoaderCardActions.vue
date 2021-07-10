@@ -1,9 +1,19 @@
 <template>
-	<v-col cols='3'>
+	<v-col :cols='noCols || 3'>
 		<v-skeleton-loader type="article, actions"/>
 	</v-col>
 </template>
 
 <script>
-	export default {}
+	export default {
+		props : {
+			noCols : {
+				required : false,
+				default(){
+					return false
+				},
+				type : Boolean
+			}
+		}
+	}
 </script>

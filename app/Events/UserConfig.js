@@ -55,7 +55,7 @@ const events = {
 				Validate(themeConfig,{
 					theme : 'required'
 				})
-				console.log(themeConfig)
+				
 				let config = await UserConfig.findOne()
 		
 				config.theme = themeConfig.theme

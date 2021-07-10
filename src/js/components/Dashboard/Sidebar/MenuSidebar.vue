@@ -38,6 +38,11 @@ export default {
 				route : ''
 			},
 			{
+				title : 'Developments',
+				icon : 'fa fa-laptop-code',
+				route : ''
+			},
+			{
 				title : 'Developers',
 				icon : 'fa fa-users',
 				route : ''

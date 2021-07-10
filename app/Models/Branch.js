@@ -7,7 +7,10 @@ const Branch = Sequelize.define('Branch',{
 	},
     description : {
         type : DataTypes.STRING
-    }
+    },
+	id_repository : {
+		type : DataTypes.NUMBER
+	}
 },{
 	paranoid : true
 })

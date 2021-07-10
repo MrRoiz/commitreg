@@ -15,24 +15,27 @@
 			<v-divider class="mx-3"/>
 
 			<v-card-text>
-				<v-row>
-					<v-col>
-						<v-text-field
-							label="Full Name"
-							:disabled="loading"
-							v-model="fullName"
-						/>
-					</v-col>
-					<v-col class="d-flex justify-center align-center">
-						<v-btn
-							text
-							@click="toggleTheme"
-							:disabled="loading"
-						>
-							<theme-icon/>Toggle Theme
-						</v-btn>
-					</v-col>
-				</v-row>
+				<v-form ref="userConfigForm" @submit.prevent='saveConfig'>
+					<v-row>
+						<v-col>
+							<v-text-field
+								label="Full Name"
+								:disabled="loading"
+								v-model="fullName"
+								:rules='rules.name'
+							/>
+						</v-col>
+						<v-col class="d-flex justify-center align-center">
+							<v-btn
+								text
+								@click="toggleTheme"
+								:disabled="loading"
+							>
+								<theme-icon/>Toggle Theme
+							</v-btn>
+						</v-col>
+					</v-row>
+				</v-form>
 			</v-card-text>
 
 			<v-card-actions class="d-flex justify-end">
@@ -71,7 +74,12 @@
 			}
 		},
 		data : ()=>({
-			fullName : ''
+			fullName : '',
+			rules : {
+				name : [
+					value=> !!value || 'Required Field'
+				]
+			}		
 		}),
 		methods : {
 			...mapMutations([
@@ -82,14 +90,16 @@
 				'showAlert'
 			]),
 			saveConfig(){
-				this.defineLoadingWelcomePage(true)
+				if(this.$refs.userConfigForm.validate()){
+					this.defineLoadingWelcomePage(true)
 
-				ipcRenderer.once('storeUserConfigResponse',this.savedConfig)
+					ipcRenderer.once('storeUserConfigResponse',this.savedConfig)
 
-				ipcRenderer.send('storeUserConfig',{
-					name : this.fullName,
-					theme : this.themeString
-				})
+					ipcRenderer.send('storeUserConfig',{
+						name : this.fullName,
+						theme : this.themeString
+					})
+				}
 			},
 			savedConfig(e,response){
 				this.defineLoadingWelcomePage(false)

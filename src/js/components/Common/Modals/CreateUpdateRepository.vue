@@ -8,7 +8,7 @@
 			<v-card-title>{{ !id ? 'Create Repository' : 'Update Repository'}}</v-card-title>
 			<v-card-text>
 				<v-container>
-					<v-form ref="createRepositoryForm">
+					<v-form ref="createRepositoryForm" @submit.prevent='save'>
 						<v-text-field v-model='name' label='Name' :rules='rules.name'/>
 						<v-textarea v-model='description' label='Description'/>
 					</v-form>

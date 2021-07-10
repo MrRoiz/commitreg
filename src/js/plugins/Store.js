@@ -31,6 +31,7 @@ export default new Vuex.Store({
 					id         : null,
 					name       : '',
 					description: '',
+					idRepository : null
 				}
 			},
 			showModalCreation : false,
@@ -125,7 +126,7 @@ export default new Vuex.Store({
 				...branches
 			]
 		},
-		defineShowModalUpdateCreateBranch(state,{show,data = null}){
+		defineShowModalUpdateCreateBranch(state,{show,data = null,idRepository = null}){			
 			if(data){
 				state.branch.updateCreate.data.id = data.id
 				state.branch.updateCreate.data.name = data.name
@@ -139,6 +140,8 @@ export default new Vuex.Store({
 					}
 				})
 			}
+
+			state.branch.updateCreate.data.idRepository = idRepository
 
 			state.branch.updateCreate.showModal = show
 		},
