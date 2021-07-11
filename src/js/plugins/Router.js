@@ -6,6 +6,7 @@ import DashboardMain from '../components/Dashboard/Views/Main.vue'
 import DashboardCommits from '../components/Dashboard/Views/Commits.vue'
 import DashboardBranches from '../components/Dashboard/Views/Branches/Branches.vue'
 import DashboardRepositories from '../components/Dashboard/Views/Repositories/Repositories.vue'
+import DashboardModules from '../components/Dashboard/Views/Modules/Modules.vue'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ const routerConfig = new Router({
 				{
 					path : '/branches',
 					component : DashboardBranches
+				},
+				{
+					path : '/modules',
+					component : DashboardModules
 				}
 			]
 		}

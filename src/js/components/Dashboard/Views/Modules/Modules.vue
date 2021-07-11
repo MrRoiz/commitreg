@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<title-header title="Branches"/>
+		<title-header title="Modules"/>
 
 		<div v-if="!loading">
 			<template v-if='repositories.length > 0'>
@@ -8,7 +8,7 @@
 			</template>
 			<no-content-message v-else>
 				<template v-slot:message>
-					No repositories to associate branches
+					No repositories to associate modules
 				</template>
 				<template v-slot:action>
 					<v-btn @click='defineShowModalUpdateCreateRepository({show:true})'>
@@ -38,7 +38,7 @@
 		computed : {
 			...mapState({
 				repositories : state=>state.repository.repositories,
-				branches : state=>state.branch.branches
+				modules : state=>state.module.modules
 			})
 		},
 		data : ()=>({
@@ -48,12 +48,12 @@
 			if(this.repositories.length <= 0){
 				this.loading = true
 				if(this.repositories.length <= 0) await this.getRepositories()
-				if(this.branches.length <= 0) await this.getBranches()
+				if(this.modules.length <= 0) await this.getModules()
 				this.loading = false
 			}
 		},
 		methods : {
-			...mapActions(['getRepositories','getBranches']),
+			...mapActions(['getRepositories','getModules']),
 			...mapMutations(['defineShowModalUpdateCreateRepository'])
 		}
 	}

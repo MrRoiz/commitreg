@@ -35,7 +35,7 @@ export default {
 			{
 				title : 'Modules',
 				icon : 'fa fa-sitemap',
-				route : ''
+				route : 'modules'
 			},
 			{
 				title : 'Developments',

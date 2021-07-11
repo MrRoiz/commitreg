@@ -11,7 +11,7 @@
 						text
 						color='success'
 						small
-						@click='defineShowModalUpdateCreateBranch({show:true,idRepository:repository.id})'
+						@click='defineShowModalUpdateCreateModule({show:true,idRepository:repository.id})'
 					>
 						<v-icon>fa fa-plus</v-icon>
 					</v-btn>
@@ -21,28 +21,24 @@
 				<v-divider/>
 
 				<v-card-text>
-
-					<template v-if='branches.length > 0'>
+					<template v-if='modules.length > 0'>
 						<v-slide-group multiple show-arrows>
 
-							<v-slide-item v-for="branch of branches" :key='branch.id'>
-								<branch :branch='branch' :idRepository='repository.id'/>
-							</v-slide-item>
+							<module v-for='module of modules' :key='module.id' :module='module' :idRepository='repository.id'/>
 
 						</v-slide-group>
 					</template>
 					<template v-else>
 
 						<no-content-message>
-							<template v-slot:message>No branches associated to this repository</template>
+							<template v-slot:message>No modules associated to this repository</template>
 							<template v-slot:action>
-								<v-btn @click='defineShowModalUpdateCreateBranch({show:true,idRepository:repository.id})'>
-									create branch
+								<v-btn @click='defineShowModalUpdateCreateModule({show:true,idRepository:repository.id})'>
+									create module
 								</v-btn>
 							</template>
 						</no-content-message>
 					</template>
-
 				</v-card-text>
 
 			</v-card>
@@ -51,16 +47,16 @@
 </template>
 
 <script>
+	import Module from './Module.vue'
 	import { mapMutations, mapState } from 'vuex'
-	import Branch from './Branch.vue'
 	import NoContentMessage from '../../../Common/Messages/NoContentMessage.vue'
 	import SkeletonLoader from '../../../Common/SkeletonLoaders/LoaderCardActions.vue'
 
 	export default {
 		components : {
-			Branch,
 			NoContentMessage,
-			SkeletonLoader
+			SkeletonLoader,
+			Module
 		},
 		props : {
 			repository : {
@@ -70,14 +66,14 @@
 		},
 		computed : {
 			...mapState({
-				fullBranches : (state)=>state.branch.branches
+				fullModules : (state)=>state.module.modules
 			}),
-			branches(){
-				return this.fullBranches.filter(branch=>branch.id_repository == this.repository.id)
+			modules(){
+				return this.fullModules.filter(module=>module.id_repository == this.repository.id)
 			}
 		},
 		methods : {
-			...mapMutations(['defineShowModalUpdateCreateBranch'])
+			...mapMutations(['defineShowModalUpdateCreateModule'])
 		}
 	}
 </script>

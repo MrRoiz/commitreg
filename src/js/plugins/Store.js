@@ -21,7 +21,6 @@ export default new Vuex.Store({
 					description: '',
 				}
 			},
-			showModalCreation : false,
 			repositories : []
 		},
 		branch : {
@@ -34,8 +33,19 @@ export default new Vuex.Store({
 					idRepository : null
 				}
 			},
-			showModalCreation : false,
 			branches : []
+		},
+		module : {
+			updateCreate : {
+				showModal : false,
+				data : {
+					id         : null,
+					name       : '',
+					description: '',
+					idRepository : null
+				}
+			},
+			modules : []
 		},
 		global : {
 			darkTheme: true,
@@ -164,6 +174,50 @@ export default new Vuex.Store({
 				return branch.id != idBranch
 			})
 		},
+		defineShowModalUpdateCreateModule(state,{show,data = null,idRepository = null}){			
+			if(data){
+				state.module.updateCreate.data.id = data.id
+				state.module.updateCreate.data.name = data.name
+				state.module.updateCreate.data.description = data.description
+			}else{
+				Object.keys(state.module.updateCreate.data).forEach(key=>{
+					if(key == 'id'){
+						state.module.updateCreate.data[key] = null
+					}else{
+						state.module.updateCreate.data[key] = ''	
+					}
+				})
+			}
+
+			state.module.updateCreate.data.idRepository = idRepository
+
+			state.module.updateCreate.showModal = show
+		},
+		defineNameModuleUpdateCreate(state,name){
+			state.module.updateCreate.data.name = name
+		},
+		defineDescriptionModuleUpdateCreate(state,description){
+			state.module.updateCreate.data.description = description
+		},
+		associateModules(state,modules){
+			state.module.modules = [
+				...state.module.modules,
+				...modules
+			]
+		},
+		updateModule(state,updatedModule){
+			let module = state.module.modules.find(module=>module.id == updatedModule.id)
+			
+			Object.entries(updatedModule).forEach(([attribute,value])=>{
+				if(attribute == 'id') return
+				module[attribute] = value
+			})
+		},
+		removeModule(state,idModule){
+			state.module.modules = state.module.modules.filter(module=>{
+				return module.id != idModule
+			})
+		}
 	},
 	getters : {
 		themeString(state){
@@ -362,6 +416,100 @@ export default new Vuex.Store({
 	
 				ipcRenderer.send('destroyBranch',{
 					id : idBranch
+				})
+			})
+		},
+		getModules({commit}){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('indexModuleResponse',(e,response)=>{
+					if(response.bool){
+						commit('associateModules',response.message)
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('indexModule')
+			})
+		},
+		saveModule({commit},module){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('storeModuleResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreateModule',{
+							show : false
+						})
+
+						commit('associateModules',[response.message])
+	
+						commit('showAlert',{
+							message: 'Module Saved',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('storeModule',module)
+			})
+		},
+		updateModule({commit},module){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('updateModuleResponse',(e,response)=>{
+					if(response.bool){
+						commit('defineShowModalUpdateCreateModule',{
+							show : false
+						})
+
+						commit('updateModule',response.message)
+	
+						commit('showAlert',{
+							message: 'Module Updated',
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('updateModule',module)
+			})
+		},
+		deleteModule({commit},idModule){
+			return new Promise((resolve)=>{
+				ipcRenderer.once('destroyModuleResponse',(event,response)=>{
+	
+					if(response.bool){
+						commit('removeModule',idModule)
+	
+						commit('showAlert',{
+							message : response.message,
+							type : 'success'
+						})
+					}else{
+						commit('showAlert',{
+							message : response.message,
+							type : 'danger'
+						})
+					}
+					resolve()
+				})
+	
+				ipcRenderer.send('destroyModule',{
+					id : idModule
 				})
 			})
 		},

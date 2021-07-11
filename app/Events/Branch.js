@@ -7,8 +7,8 @@ const events = {
 	index(){
 		ipcMain.on('indexBranch',async (event)=>{
 			try{
-				let repositories = await Branch.findAll()
-				event.reply('indexBranchResponse',Response(true,repositories.map(repository=>repository.toJSON())))
+				let branches = await Branch.findAll()
+				event.reply('indexBranchResponse',Response(true,branches.map(repository=>repository.toJSON())))
 			}catch(error){
 				event.reply('indexBranchResponse',Response(false,error.message))
 			}
