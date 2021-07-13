@@ -1,57 +1,76 @@
 <template>
 	<v-list dense nav>
-		<v-list-item-group v-model="selected">
-			<item-menu-sidebar v-for="item in items" :key="item.title" :title="item.title" :icon="item.icon" :route="item.route"></item-menu-sidebar>
+		<v-list-item-group v-model="selected" v-if='!loading'>
+			<template v-if='features.length > 0'>
+				<item-menu-sidebar 
+					v-for="feature in features"
+					:key="feature.id"
+					:feature='feature'
+				/>
+			</template>
+			<template v-else>
+				<v-list-item>
+					<v-list-item-icon>
+						<v-icon>fa fa-exclamation-circle</v-icon>
+					</v-list-item-icon>
+					<v-list-item-content>
+						<v-list-item-title>No features found</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>		
+			</template>
 		</v-list-item-group>
+		<v-list-item v-else>
+			<v-list-item-icon>
+				<v-progress-circular indeterminate/>
+			</v-list-item-icon>
+			<v-list-item-content>
+				<v-list-item-title>Loading features</v-list-item-title>
+			</v-list-item-content>
+		</v-list-item>
      </v-list>
 </template>
 
 <script>
-import ItemMenuSidebar from './ItemMenuSidebar.vue'
+	import { mapMutations } from 'vuex'
+	import { ipcRenderer } from 'electron'
+	import ItemMenuSidebar from './ItemMenuSidebar.vue'
 
-export default {
-	data : ()=>({
-		items : [
-			{
-				title : 'Dashboard',
-				icon : 'fa fa-tachometer-alt',
-				route : '/dashboard'
-			},
-			{
-				title : 'Commits',
-				icon : 'fab fa-connectdevelop',
-				route : 'commits'
-			},
-			{
-				title : 'Repositories',
-				icon : 'fa fa-folder',
-				route : 'repositories'
-			},
-			{
-				title : 'Branches',
-				icon : 'fa fa-code-branch',
-				route : 'branches'
-			},
-			{
-				title : 'Modules',
-				icon : 'fa fa-sitemap',
-				route : 'modules'
-			},
-			{
-				title : 'Developments',
-				icon : 'fa fa-laptop-code',
-				route : ''
-			},
-			{
-				title : 'Developers',
-				icon : 'fa fa-users',
-				route : ''
+	export default {
+		components : {
+			ItemMenuSidebar
+		},
+		data : ()=>({
+			selected : 0,
+			loading : false,
+			features : []
+		}),
+		async mounted(){
+			if(this.features.length <= 0){
+				this.loading = true
+				await this.getFeatures()
+				this.loading = false
 			}
-		],
-		selected : 0
-	}),
-	components : {
-		ItemMenuSidebar
+		},
+		methods : {
+			...mapMutations(['showAlert']),
+			getFeatures(){
+				return new Promise(resolve=>{
+					let self = this
+					ipcRenderer.once('indexFeatureFlagResponse',(e,response)=>{
+						if(response.bool){
+							self.features = response.message
+						}else{
+							self.showAlert({
+								message : response.message,
+								type : 'danger'
+							})
+						}
+						resolve()
+					})
+
+					ipcRenderer.send('indexFeatureFlag')
+				});
+			},
+		}
 	}
-}
 </script>
