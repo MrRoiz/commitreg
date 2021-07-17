@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
-const Developer = require('../../models/developer')
-const UserConfig = require('../../models/userconfig')
+const Developer = require('../../database/models/developer')
+const UserConfig = require('../../database/models/userconfig')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
 

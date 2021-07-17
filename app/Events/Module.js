@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
-const Module = require('../../models/module')
+const Module = require('../../database/models/module')
 
 const events = {
 	index(){

@@ -1,0 +1,4 @@
+{
+  "storage": "database/store.db",
+  "dialect": "sqlite"
+}

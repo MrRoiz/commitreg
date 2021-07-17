@@ -45,7 +45,7 @@
 			loading : false
 		}),
 		async mounted(){
-			if(this.repositories.length <= 0){
+			if(this.repositories.length <= 0 || this.modules.length <= 0){
 				this.loading = true
 				if(this.repositories.length <= 0) await this.getRepositories()
 				if(this.modules.length <= 0) await this.getModules()

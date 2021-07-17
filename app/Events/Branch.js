@@ -1,7 +1,9 @@
+'use strict'
+
 const { ipcMain } = require('electron')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
-const Branch = require('../../models/branch')
+const Branch = require('../../database/models/branch')
 
 const events = {
 	index(){
