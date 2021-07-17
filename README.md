@@ -8,6 +8,7 @@ To install this app just need to install all the dependecies and compile the app
 
 ```bash
 npm install
+npm run migrate-fresh-seed
 npm run prod
 npm run start
 ```
