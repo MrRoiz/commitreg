@@ -1,12 +1,14 @@
+'use strict'
+
 const { DataTypes } = require('sequelize')
-const Sequelize = require('../../db/index')
+const Sequelize = require('./index')
 
 const Repository = Sequelize.define('Repository',{
 	name : {
 		type : DataTypes.STRING
 	},
 	description : {
-		type : DataTypes.INTEGER
+		type : DataTypes.STRING
 	}
 },
 {

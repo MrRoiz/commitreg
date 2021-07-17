@@ -1,5 +1,7 @@
+'use strict'
+
 const { DataTypes } = require('sequelize')
-const Sequelize = require('../../db/index')
+const Sequelize = require('./index')
 
 const Developer = Sequelize.define('Developer',{
 	name : {

@@ -73,7 +73,7 @@
 				fullBranches : (state)=>state.branch.branches
 			}),
 			branches(){
-				return this.fullBranches.filter(branch=>branch.id_repository == this.repository.id)
+				return this.fullBranches.filter(branch=>branch.repository_id == this.repository.id)
 			}
 		},
 		methods : {

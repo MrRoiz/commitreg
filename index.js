@@ -1,10 +1,6 @@
 (async ()=>{
-	
-	const InitSchema = require('./db/initSchema')
 	const { app, BrowserWindow } = require('electron')
 	require('./app/Events/index')
-	
-	await (new InitSchema()).migrate()
 
 	function createWindow () {
 		const win = new BrowserWindow({

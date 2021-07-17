@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
-const Module = require('../Models/Module')
+const Module = require('../../models/module')
 
 const events = {
 	index(){
@@ -25,7 +25,7 @@ const events = {
 				let newModule = await Module.create({
 					name       : module.name,
 					description: module.description,
-					id_repository : module.idRepository
+					repository_id : module.idRepository
 				})
 
 				event.reply('storeModuleResponse',Response(true,newModule.toJSON()))

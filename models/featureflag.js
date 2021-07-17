@@ -1,5 +1,7 @@
+'use strict'
+
 const { DataTypes } = require('sequelize')
-const Sequelize = require('../../db/index')
+const Sequelize = require('./index')
 
 const FeatureFlag = Sequelize.define('FeatureFlag',{
 	feature : {
@@ -15,7 +17,6 @@ const FeatureFlag = Sequelize.define('FeatureFlag',{
 		type : DataTypes.STRING
 	}
 },{
-	tableName : 'feature_flags',
 	paranoid : true
 })
 

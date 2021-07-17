@@ -69,7 +69,7 @@
 				fullModules : (state)=>state.module.modules
 			}),
 			modules(){
-				return this.fullModules.filter(module=>module.id_repository == this.repository.id)
+				return this.fullModules.filter(module=>module.repository_id == this.repository.id)
 			}
 		},
 		methods : {

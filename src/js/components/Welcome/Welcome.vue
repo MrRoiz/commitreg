@@ -47,7 +47,7 @@
 						this.defineDarkTheme(isDarkTheme)
 						this.setUserData({
 							username: response.message.Developer.name,
-							id      : response.message.id_developer
+							id      : response.message.developer_id
 						})
 	
 						this.$router.push('/dashboard')

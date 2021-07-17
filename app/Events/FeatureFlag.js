@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
 const Response = require('../Utils/Response')
-const FeatureFlag = require('../Models/FeatureFlag')
+const FeatureFlag = require('../../models/featureflag')
 
 const events = {
 	index(){

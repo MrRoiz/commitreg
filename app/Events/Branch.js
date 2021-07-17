@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
-const Branch = require('../Models/Branch')
+const Branch = require('../../models/branch')
 
 const events = {
 	index(){
@@ -25,7 +25,7 @@ const events = {
 				let newBranch = await Branch.create({
 					name       : branch.name,
 					description: branch.description,
-					id_repository : branch.idRepository
+					repository_id : branch.idRepository
 				})
 
 				event.reply('storeBranchResponse',Response(true,newBranch.toJSON()))

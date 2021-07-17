@@ -1,18 +1,20 @@
-const { DataTypes } = require('sequelize')
-const Sequelize = require('../../db/index')
+'use strict'
 
-const Module = Sequelize.define('Module',{
+const { DataTypes } = require('sequelize')
+const Sequelize = require('./index')
+
+const Branch = Sequelize.define('Branch',{
 	name : {
 		type : DataTypes.STRING
 	},
     description : {
         type : DataTypes.STRING
     },
-	id_repository : {
-		type : DataTypes.NUMBER
+	repository_id : {
+		type : DataTypes.INTEGER
 	}
 },{
 	paranoid : true
 })
 
-module.exports = Module
+module.exports = Branch

@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron')
-const Developer = require('../Models/Developer')
-const UserConfig = require('../Models/UserConfig')
+const Developer = require('../../models/developer')
+const UserConfig = require('../../models/userconfig')
 const Response = require('../Utils/Response')
 const Validate = require('../Utils/Validate')
 
@@ -35,7 +35,7 @@ const events = {
 			
 				await UserConfig.create({
 					theme       : config.theme,
-					id_developer: mainUserDeveloper.id
+					developer_id: mainUserDeveloper.id
 				})
 		
 				let createdUserConfig = await UserConfig.findOne({
